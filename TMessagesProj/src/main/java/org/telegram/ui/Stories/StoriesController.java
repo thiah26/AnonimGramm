@@ -1295,11 +1295,11 @@ public class StoriesController {
             if (!profile) {
                 storiesStorage.updateMaxReadId(dialogId, newReadId);
             }
-            TL_stories.TL_stories_readStories req = new TL_stories.TL_stories_readStories();
-            req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
-            req.max_id = storyItem.id;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
-            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.storiesReadUpdated);
+            // ANONIM TL_stories.TL_stories_readStories req = new TL_stories.TL_stories_readStories();
+            // ANONIM req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
+            // ANONIM req.max_id = storyItem.id;
+            // ANONIM ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
+            // ANONIM NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.storiesReadUpdated);
             return true;
         }
         return false;

@@ -6774,6 +6774,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             currentMessageObject = null;
         }
         messageObject.isOutOwnerCached = null;
+        if (messageObject.deleted) {
+            setAlpha(0.5f);
+        } else {
+            setAlpha(1.0f);
+        }
         boolean widthChanged = lastWidth != getParentWidth();
         lastHeight = AndroidUtilities.displaySize.y;
         lastWidth = getParentWidth();

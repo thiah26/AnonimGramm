@@ -1,5 +1,4 @@
-/*
- * This is the source code of Telegram for Android v. 5.x.x.
+/*This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
  *
@@ -11383,7 +11382,6 @@ req.offline = true;
     }
 
     public boolean sendTyping(long dialogId, long threadMsgId, int action, String emojicon, int classGuid) {
-        return false; // AnonimGramm: Ghost Typing
         if (action < 0 || action >= sendingTypings.length || dialogId == 0) {
             return false;
         }
@@ -11464,7 +11462,8 @@ req.offline = true;
                 req.action = interactionSeen;
             }
             threads.put(threadMsgId, true);
-            int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> cancelTyping(action, dialogId, threadMsgId)), ConnectionsManager.RequestFlagFailOnServerErrors);
+            // AnonimGramm: Ghost Typing
+            // int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> cancelTyping(action, dialogId, threadMsgId)), ConnectionsManager.RequestFlagFailOnServerErrors);
             if (classGuid != 0) {
                 getConnectionsManager().bindRequestToGuid(reqId, classGuid);
             }
@@ -11480,7 +11479,8 @@ req.offline = true;
                 req.peer.access_hash = chat.access_hash;
                 req.typing = true;
                 threads.put(threadMsgId, true);
-                int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> cancelTyping(action, dialogId, threadMsgId)), ConnectionsManager.RequestFlagFailOnServerErrors);
+                // AnonimGramm: Ghost Typing
+            // int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> cancelTyping(action, dialogId, threadMsgId)), ConnectionsManager.RequestFlagFailOnServerErrors);
                 if (classGuid != 0) {
                     getConnectionsManager().bindRequestToGuid(reqId, classGuid);
                 }
@@ -14587,7 +14587,7 @@ req.offline = true;
                 request.max_id = task.maxId;
                 req = request;
             }
-            getConnectionsManager().sendRequest(req, (response, error) -> {
+            if (false) getConnectionsManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
                     if (response instanceof TLRPC.TL_messages_affectedMessages) {
                         TLRPC.TL_messages_affectedMessages res = (TLRPC.TL_messages_affectedMessages) response;
@@ -14603,7 +14603,7 @@ req.offline = true;
                 req.peer.chat_id = chat.id;
                 req.peer.access_hash = chat.access_hash;
                 req.max_date = task.maxDate;
-                getConnectionsManager().sendRequest(req, (response, error) -> {
+                if (false) getConnectionsManager().sendRequest(req, (response, error) -> {
 
                 });
             }
@@ -14796,7 +14796,6 @@ req.offline = true;
             monoForumPeerId = 0;
         }
 
-        return; // AnonimGramm: Ghost Read
         if (createReadTask) {
             Utilities.stageQueue.postRunnable(() -> {
                 ReadTask currentReadTask;

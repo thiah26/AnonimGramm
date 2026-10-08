@@ -11462,9 +11462,8 @@ req.offline = true;
                 req.action = interactionSeen;
             }
             threads.put(threadMsgId, true);
-            // AnonimGramm: Ghost Typing
-            // int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> cancelTyping(action, dialogId, threadMsgId)), ConnectionsManager.RequestFlagFailOnServerErrors);
             if (classGuid != 0) {
+            int reqId = 0; // AnonimGramm: Ghost Typing
                 getConnectionsManager().bindRequestToGuid(reqId, classGuid);
             }
         } else {
@@ -11479,10 +11478,7 @@ req.offline = true;
                 req.peer.access_hash = chat.access_hash;
                 req.typing = true;
                 threads.put(threadMsgId, true);
-                // AnonimGramm: Ghost Typing
-            // int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> cancelTyping(action, dialogId, threadMsgId)), ConnectionsManager.RequestFlagFailOnServerErrors);
                 if (classGuid != 0) {
-                    getConnectionsManager().bindRequestToGuid(reqId, classGuid);
                 }
             }
         }

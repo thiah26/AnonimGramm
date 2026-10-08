@@ -18817,7 +18817,7 @@ req.offline = true;
             } else if (baseUpdate instanceof TL_update.TL_updateDeleteMessages) {
                 TL_update.TL_updateDeleteMessages update = (TL_update.TL_updateDeleteMessages) baseUpdate;
                 for (Integer id : update.messages) {
-                    MessageObject obj = messagesDict.get(id);
+                    MessageObject obj = dialogMessagesByIds.get(id);
                     if (obj != null) {
                         obj.deleted = true;
                     }

@@ -19,13 +19,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install NDK
+      - name: Setup Android SDK and NDK
         run: |
-          sdkmanager --install "ndk;21.4.7075529"
-          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21.4.7075529" >> $GITHUB_ENV
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          cd $HOME/android-sdk/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-11076708_latest.zip
+          mv cmdline-tools latest
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529"
+          echo "ANDROID_NDK_HOME=$HOME/android-sdk/ndk/21.4.7075529" >> $GITHUB_ENV
 
       - name: Grant execute permission
         run: chmod +x ./gradlew
@@ -33,13 +40,18 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease -x lint
 
-      - name: Sign APK with debug key
+      - name: Find APK
+        run: find . -name "*.apk" -type f
+
+      - name: Sign APK
         run: |
           keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
-          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks debug.keystore --ks-pass pass:android --out TMessagesProj/build/outputs/apk/release/anonimgramm.apk TMessagesProj/build/outputs/apk/release/app-release-unsigned.apk
+          APK=$(find . -name "app-release-unsigned.apk" -type f | head -1)
+          if [ -z "$APK" ]; then APK=$(find . -name "*.apk" -type f | head -1); fi
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks debug.keystore --ks-pass pass:android --out anonimgramm.apk "$APK"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: anonimgramm-apk
-          path: TMessagesProj/build/outputs/apk/release/anonimgramm.apk
+          path: anonimgramm.apk
